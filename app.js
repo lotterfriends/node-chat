@@ -78,6 +78,8 @@ io.sockets.on('connection', function (socket) {
 
 function escapeHTML(input) {
     	if (!input) return "keine Angabe";
+        input = input.replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g,'').replace(/\s+/g,' ');
+        if (input == "") return "keine Anhabe";
 	return input
         .replace(/&/g, '&amp;$1')
         .replace(/</g, '&lt;')

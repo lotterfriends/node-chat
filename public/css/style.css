@@ -37,3 +37,10 @@
 #messages-inner .username {
 	font-weight: bold;
 }
+
+#messages .input-append{
+	background: none repeat scroll 0 0 #CCCCCC;
+	border-top: 1px solid #999999;
+	margin: 0 -20px -20px;
+	padding: 10px;
+}

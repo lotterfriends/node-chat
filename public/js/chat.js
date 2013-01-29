@@ -1,4 +1,4 @@
-var socket = io.connect('http://localhost');
+var socket = io.connect('http://chicken-racing.de');
 
 socket.on('connect', function(){
 	socket.emit('adduser', prompt("Wie ist dein Nickname?"));
@@ -44,6 +44,10 @@ $(function(){
 			$(this).blur();
 			$('#datasend').click();
 		}
+	});
+
+	$('.clear').click(function() {
+		$('#messages-inner *').remove();
 	});
 
 });

@@ -1,17 +1,8 @@
-.login {
-	background-color: #FFFFFF;
-    border: 1px solid #E5E5E5;
-    border-radius: 5px 5px 5px 5px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    margin: 0 auto 20px;
-    max-width: 300px;
-    padding: 19px 29px 29px;
-} 
 
 .content {
    border: 1px solid rgba(0, 0, 0, 0.05);
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
-    background-color: #F5F5F5;
+    background-color: #999; /* F5F5F5*/
     border-radius: 6px 6px 6px 6px;
     margin-bottom: 30px;
     padding: 60px;
@@ -30,17 +21,50 @@
 }
 
 #messages-inner {
+	padding: 0;
 	height: 500px;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#messages-inner .entry {
+	margin: 0;
+	padding: 10px;
+}
+
+#messages-inner .entry:nth-child(odd) {
+	background-color: #efefef;
 }
 
 #messages-inner .username {
 	font-weight: bold;
+	color: #369BD7;
+}
+
+#messages-inner .time {
+	font-size: 0.9em;
+}
+
+#messages {
+	width: 800px;
+}
+
+#messages.well {
+	padding: 0;
 }
 
 #messages .input-append{
 	background: none repeat scroll 0 0 #CCCCCC;
 	border-top: 1px solid #999999;
-	margin: 0 -20px -20px;
 	padding: 10px;
+}
+
+#users #user-list li.active {
+	font-style: italic;
+	font-weight: bold;
+}
+
+.count {
+	float: right;
+    padding: 16px 30px 20px 5px;
 }

@@ -9,16 +9,17 @@ var express = require('express')
   , io = require('socket.io').listen(server)
   , routes = require('./routes')
   , socket = require('socket.io')
-  , bbcode = require('bbcode');
+  , bbcode = require('bbcode')
+  , smileyParser = require('./smileyParser.js')
+  , utils = require('./utils.js');
 
 // Configuration
-
 
 app.configure(function(){
 	app.set('title', 'Chat');
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'jade');
-	app.set('view options', {layout: false});
+	app.set('view options', { layout: false });
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
 	app.use(app.router);
@@ -35,58 +36,63 @@ app.configure('production', function(){
 
 // Routes
 app.get('/', routes.index);
-app.get('/chat', routes.chat);
 
 var usernames = {};
 
 io.sockets.on('connection', function (socket) {
 	
 	socket.on('adduser', function(username){
-		username = escapeHTML(username);
-		if (username.length > 30) {
-			socket.emit('fehler', 'Zu langer Benutzername');
-		} else {
-			socket.username = username;
-			usernames[username] = username;
-			socket.emit('updatechat', 'SERVER', 'du bist verbunden');
-			socket.broadcast.emit('updatechat', 'SERVER', username + ' hat sich verbunden');
-			io.sockets.emit('updateusers', usernames);
+		if (!username || username.trim().length < 1 ) {
+			return socket.emit('fehler', 'Kein Benutzername eingegeben');
 		}
+		if (usernames[username]){
+			return socket.emit('fehler', 'Benutzername bereits vergeben');
+		}
+		if (username.length > 20) {
+			return socket.emit('fehler', 'Zu langer Benutzername');
+		}
+		username = escapeHTML(username).trim();
+		socket.username = username;
+		usernames[username] = username;
+		socket.emit('updatechat', 'SERVER', 'du bist verbunden');
+		socket.emit('login', username);
+		socket.broadcast.emit('updatechat', 'SERVER', username + ' hat sich verbunden');
+		io.sockets.emit('updateusers', usernames);
 	});
 
 	socket.on('sendchat', function (data)  {
 		if (!socket.username) {
-			socket.emit('loginFehler', 'Nicht eingeloggt!');
-		} else if (!data) {
-			return;
-                } else if (data.length > 500) {
-			socket.emit('fehler','Zu langer Text');
-		} else {
-			data = escapeHTML(data);
-                        bbcode.parse(data, function(content) { 
-				io.sockets.emit('updatechat', socket.username, content);
-			});
+			return socket.emit('fehler', 'Nicht eingeloggt!');
+		} 
+		if (!data) {
+			return socket.emit('fehler', 'Kein Text eingegeben.');
+        } 
+        if (data.length > 300) {
+			return socket.emit('fehler','Zu langer Text');
 		}
+		data = escapeHTML(data).trim();
+		bbcode.parse(data, function(content) {
+			content = smileyParser.parse(content);
+			io.sockets.emit('updatechat', socket.username, content);
+		});
 	});
 
 	socket.on('disconnect', function(){
 		delete usernames[socket.username];
 		io.sockets.emit('updateusers', usernames);
-		socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
+		socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' wurde ausgeloggt');
 	});
 });
 
 function escapeHTML(input) {
-    	if (!input) return "keine Angabe";
-        input = input.replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g,'').replace(/\s+/g,' ');
-        if (input == "") return "keine Anhabe";
+	if (!input || input.trim() == "") return "";
 	return input
-        .replace(/&/g, '&amp;$1')
+		.replace(/&/g, '&amp;$1')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
 }
 
 server.listen(1337, function(){
-	console.log("express-bootstrap app running");
+	console.log("Der Chat wurde auf Port 1337 gestartet");
 });
 

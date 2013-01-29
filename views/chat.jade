@@ -2,7 +2,7 @@
 html
 	head
 		title= title
-		link(rel='stylesheet', href='/libs/bootstrap/css/united.bootstrap.min.css')
+		link(rel='stylesheet', href='/libs/bootstrap/css/cerulean.bootstrap.min.css')
 		link(rel='stylesheet', href='/libs/bootstrap/css/bootstrap-responsive.min.css')
 		link(rel='stylesheet', href='/css/style.css')
 	body
@@ -15,16 +15,15 @@ html
 		.container
 			.row
 				.content.chat
-					.span3
-						#users.well.sidebar-nav
-							ul#user-list.nav.nav-list
-								
-					#messages.span8.well
-						#messages-inner
-						.input-append
-							input.span7#data(type='text')
+					#messages.span8
+						#messages-inner.well
+						span.count 300		
+						.input-append.well.well-large
+							input.span6#data(type='text')
 							button#datasend.btn.btn-primary senden
-							button.btn.clear Clear							
+							button.btn.clear Clear Chat	
+					#users.sidebar-nav.span3.well
+						ul#user-list.nav.nav-list
 					.clearfix
 				
 	script(src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js")

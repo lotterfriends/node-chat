@@ -4,13 +4,16 @@ socket.on('connect', function(){
 	socket.emit('adduser', prompt("Wie ist dein Nickname?"));
 });
 
-function login() {
-	socket.emit('login', $('#login form').serializeArray());
-}
-
-
 socket.on('fehler', function(message){
 	alert(message);
+	if(!$(window).data('user')) {
+		socket.emit('adduser', prompt("Wie ist dein Nickname?"));
+	}
+	$('#data').focus();
+});
+
+socket.on('login', function(username) {
+	$(window).data('user', username);
 });
 
 
@@ -27,8 +30,15 @@ socket.on('updatechat', function (username, data) {
 
 socket.on('updateusers', function(data) {
 	$('#users ul').empty();
+	$('#users ul').append('<li class="nav-header">Online</li>');
 	$.each(data, function(key, value) {
-		$('#users ul').append('<li><a href="#">' + key + '</a></li>');
+		var activeCSSClass = '';
+		var user = '<a href="#">' + key + '</a>';
+		if ($(window).data('user') == key){
+			activeCSSClass = ' class="active" ';
+			user = key;
+		} 
+		$('#users ul').append('<li' + activeCSSClass +'>'+ user +'</li>');
 	});
 });
 
@@ -44,10 +54,20 @@ $(function(){
 			$(this).blur();
 			$('#datasend').click();
 		}
+		var akt_count = $(this).val().length;
+		$('.count').html(300 - akt_count);
 	});
 
 	$('.clear').click(function() {
 		$('#messages-inner *').remove();
 	});
+	
+	$('#users #user-list').on('click', 'a', function(e) {
+		$('#data').val('@' + $(this).text() + ' ' + $('#data').val()).focus();
+		e.stopPropagation();
+		return false;
+	});
+	
+	
 
 });

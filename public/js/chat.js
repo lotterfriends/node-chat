@@ -1,4 +1,4 @@
-var socket = io.connect('http://chicken-racing.de');
+var socket = io.connect('http://localhost');
 
 socket.on('connect', function(){
 	socket.emit('adduser', prompt("Wie ist dein Nickname?"));

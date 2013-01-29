@@ -15,7 +15,7 @@ var express = require('express')
 
 
 app.configure(function(){
-	app.set('title', 'DGFG Chat');
+	app.set('title', 'Chat');
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'jade');
 	app.set('view options', {layout: false});
@@ -43,11 +43,15 @@ io.sockets.on('connection', function (socket) {
 	
 	socket.on('adduser', function(username){
 		username = escapeHTML(username);
-		socket.username = username;
-		usernames[username] = username;
-		socket.emit('updatechat', 'SERVER', 'du bist verbunden');
-		socket.broadcast.emit('updatechat', 'SERVER', username + ' hat sich verbunden');
-		io.sockets.emit('updateusers', usernames);
+		if (username.length > 30) {
+			socket.emit('fehler', 'Zu langer Benutzername');
+		} else {
+			socket.username = username;
+			usernames[username] = username;
+			socket.emit('updatechat', 'SERVER', 'du bist verbunden');
+			socket.broadcast.emit('updatechat', 'SERVER', username + ' hat sich verbunden');
+			io.sockets.emit('updateusers', usernames);
+		}
 	});
 
 	socket.on('sendchat', function (data)  {

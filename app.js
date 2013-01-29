@@ -10,8 +10,7 @@ var express = require('express')
   , routes = require('./routes')
   , socket = require('socket.io')
   , bbcode = require('bbcode')
-  , smileyParser = require('./smileyParser.js')
-  , utils = require('./utils.js');
+  , smileyParser = require('./smileyParser.js');
 
 // Configuration
 

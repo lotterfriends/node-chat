@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -96,7 +95,7 @@ io.sockets.on('connection', function (socket) {
 function escapeHTML(input) {
 	if (!input || input.trim() == "") return "";
 	return input
-		.replace(/&/g, '&amp;$1')
+	.replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
 }

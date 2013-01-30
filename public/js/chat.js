@@ -4,7 +4,7 @@ socket.on('connect', function(){
 	socket.emit('adduser', prompt("Wie ist dein Nickname?"));
 });
 
-socket.on('fehler', function(message){
+socket.on('error', function(message){
 	alert(message);
 	if(!$(window).data('user')) {
 		socket.emit('adduser', prompt("Wie ist dein Nickname?"));

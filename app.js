@@ -37,6 +37,7 @@ app.configure('production', function(){
 app.get('/', routes.index);
 
 var usernames = {};
+var messages = [];
 
 io.sockets.on('connection', function (socket) {
 	
@@ -44,7 +45,7 @@ io.sockets.on('connection', function (socket) {
 		if (!username || username.trim().length < 1 ) {
 			return socket.emit('fehler', 'Kein Benutzername eingegeben');
 		}
-		if (usernames[username]){
+		if (usernames[username] || username == "SERVER"){
 			return socket.emit('fehler', 'Benutzername bereits vergeben');
 		}
 		if (username.length > 20) {
@@ -53,8 +54,11 @@ io.sockets.on('connection', function (socket) {
 		username = escapeHTML(username).trim();
 		socket.username = username;
 		usernames[username] = username;
-		socket.emit('updatechat', 'SERVER', 'du bist verbunden');
 		socket.emit('login', username);
+                for (var i in messages) {
+			socket.emit('updatechat', messages[i].username, messages[i].message,messages[i].time);
+                }
+		socket.emit('updatechat', 'SERVER', 'du bist verbunden');
 		socket.broadcast.emit('updatechat', 'SERVER', username + ' hat sich verbunden');
 		io.sockets.emit('updateusers', usernames);
 	});
@@ -71,8 +75,13 @@ io.sockets.on('connection', function (socket) {
 		}
 		data = escapeHTML(data).trim();
 		bbcode.parse(data, function(content) {
-			content = smileyParser.parse(content);
-			io.sockets.emit('updatechat', socket.username, content);
+			content = smileyParser.parse(content);	
+			var time = new Date();	
+			messages.push({ "username" : socket.username, "time" : time, "message" : content });
+			if (messages.length > 30) {
+				messages.shift();
+			}
+			io.sockets.emit('updatechat', socket.username, content, time);
 		});
 	});
 
@@ -81,6 +90,7 @@ io.sockets.on('connection', function (socket) {
 		io.sockets.emit('updateusers', usernames);
 		socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' wurde ausgeloggt');
 	});
+
 });
 
 function escapeHTML(input) {

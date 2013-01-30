@@ -17,8 +17,9 @@ socket.on('login', function(username) {
 });
 
 
-socket.on('updatechat', function (username, data) {
-	var zeit = Date.create(new Date()).format('{HH}:{mm}:{ss}');
+socket.on('updatechat', function (username, data, time) {
+	if (!time) time = new Date();
+	var zeit = Date.create(time).format('{HH}:{mm}:{ss}');
 	var $time = '<span class="time">(' + zeit + ') </span>';
 	var $user = '<span class="username">'+ username + ': </span>';
 	var $message = '<span class="message">' + data +'</span>';

@@ -75,7 +75,9 @@ io.sockets.on('connection', function (socket) {
 		data = escapeHTML(data).trim();
 		bbcode.parse(data, function(content) {
 			content = smileyParser.parse(content);	
-			var time = new Date();	
+			content = convertLinks(content);
+			var time = new Date();
+				
 			messages.push({ "username" : socket.username, "time" : time, "message" : content });
 			if (messages.length > 30) {
 				messages.shift();
@@ -99,6 +101,21 @@ function escapeHTML(input) {
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
 }
+
+function convertLinks(text){      
+		var sucher = new RegExp("(^|[ \t\r\n])((ftp|http|https|gopher|mailto|news|nntp|telnet|wais|file|prospero|aim|webcal):(([A-Za-z0-9$_.+!*(),;/?:@&~=-])|%[A-Fa-f0-9]{2}){2,}(#([a-zA-Z0-9][a-zA-Z0-9$_.+!*(),;/?:@&~=%-]*))?([A-Za-z0-9$_+!*();/?:~-]))","g");
+		var ergebnis = text.match(sucher);
+		if (ergebnis && ergebnis.length) {
+			for (var i in ergebnis)	{		
+				var regexp = new RegExp(ergebnis[i], "g");					
+				text = text.replace(regexp, " <a href='"+ergebnis[i].trim()+"' target='_blank'>" + ergebnis[i].trim() + "</a>");
+			}
+		}		
+		return text;		
+}
+
+
+
 
 server.listen(1337, function(){
 	console.log("Der Chat wurde auf Port 1337 gestartet");

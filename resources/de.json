@@ -1,0 +1,11 @@
+{
+	"error.NoUsername" : "Kein Benutzername eingegeben",
+	"error.UsernameChoosen" : "Benutzername bereits vergeben",
+	"error.LongUsername" : "Zu langer Benutzername",
+	"youConnected" : "du bist verbunden",
+	"xConnected" : "hat sich verbunden",
+	"xLogout" : "wurde ausgeloggt",
+	"error.notLoggedIn" : "Nicht eingeloggt!",
+	"error.noMessage" : "Keine Nachricht eingegeben",
+	"error.longMessage" : "Die eingebene Nachricht ist zu lang"
+}

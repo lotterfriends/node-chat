@@ -28,7 +28,7 @@
 }
 
 #messages-inner .entry {
-	word-wrap: break-words;
+	word-wrap: break-word;
 	margin: 0;
 	padding: 10px;
 }

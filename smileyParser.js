@@ -15,7 +15,10 @@ smileys =  [
                 { "code" : ":beer:" , "url" : "beer.png"},
                 { "code" : ":bean:" , "url" : "bean.png"},
                 { "code" : ":beans:" , "url" : "beans.png"},
-                { "code" : ":coffee:" , "url" : "cup.png"}];
+                { "code" : ":coffee:" , "url" : "cup.png"},
+	        { "code" : ":toast:" , "url" : "bread.png"},
+        	{ "code" : ":toasts:" , "url" : "breads.png"}
+];
                 
 exports.parse = function(text) {
         for(var i in smileys) {

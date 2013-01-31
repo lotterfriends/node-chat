@@ -12,7 +12,6 @@ socket.on('error', function(message){
 	if (!$fehlerContainer.length) {
 		$fehlerContainer = $('.content.chat');
 	}
-	console.log($fehlerContainer);
 	var $fehler = $('.alert', $fehlerContainer);
 	if ($fehler.length) {
 		window.clearTimeout(fehler_id);
@@ -22,14 +21,13 @@ socket.on('error', function(message){
 		$fehlerContainer.prepend($message);
 	}
 	$fehlerContainer.ready(function() {
+		$('input:first', $fehlerContainer).focus();
 		fehler_id = window.setTimeout(function() {
 			$('.alert', $fehlerContainer).hide('slow');
 		},6000);
 	});
 	if(!$(window).data('user')) {
 		$('#login').modal('show');
-	}  else {
-		$('#data').focus();
 	}
 });
 

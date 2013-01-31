@@ -106,4 +106,26 @@ $(function(){
 			return false;
 		}
 	});
+
+	$('.puller').off('mousedown').on('mousedown', function(e) {
+		var $puller = $(this);
+		var $messages = $puller.prevAll('#messages-inner');
+		$messages.data('resize', true);
+	});
+
+	$(window).off('mouseup').on('mouseup', function(e) {
+		var $puller = $('.puller');
+		var $messages = $puller.prevAll('#messages-inner');
+		$messages.data('resize', false);
+	});
+
+	$(window).off('mousemove').on('mousemove', function(e) {
+		var $puller = $('.puller');
+		var $messages = $puller.prevAll('#messages-inner');
+		if ($messages.data('resize')) {
+			var height = e.pageY - $messages.offset().top;
+			$messages.height(height);
+		}
+	});
+
 });

@@ -25,7 +25,7 @@ body {
 
 #messages-inner {
 	padding: 0;
-	height: 500px;
+	min-height: 500px !important;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -76,5 +76,12 @@ body {
 
 .content.chat .alert {
 	margin: 2px 29px 10px;
+}
+
+.puller {
+	text-align: center;
+	margin-top: -19px;
+	margin-bottom: 19px;
+	cursor: pointer;
 }
 

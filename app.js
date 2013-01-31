@@ -92,7 +92,9 @@ io.sockets.on('connection', function (socket) {
 
 	socket.on('disconnect', function(){
 		delete usernames[socket.username];
-		io.sockets.emit('updateusers', usernames);
+		if (!socket.username) {
+			io.sockets.emit('updateusers', usernames);
+		}
 		socket.broadcast.emit('updatechat', app.get('server_username'), socket.username + ' ' + intNat.T("xLogout"));
 	});
 

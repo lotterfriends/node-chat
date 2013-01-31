@@ -84,6 +84,11 @@ $(function(){
 		var akt_count = $(this).val().length;
 		$('.count').html(300 - akt_count);
 	});
+	
+	$('#data').on('keyup', function() {
+		var akt_count = $(this).val().length;
+		$('.count').html(300 - akt_count);
+	});
 
 	$('.clear').click(function() {
 		$('#messages-inner *').remove();
@@ -114,21 +119,22 @@ $(function(){
 		}
 	});
 
-	$('.puller').off('mousedown').on('mousedown', function(e) {
+	$('.puller').on('mousedown', function(e) {
 		var $puller = $(this);
 		var $messages = $puller.prevAll('#messages-inner');
 		$messages.data('resize', true);
+		e.stopPropagation();
+		return false;
 	});
 
-	$(window).off('mouseup').on('mouseup', function(e) {
+	$(window).on('mouseup', function(e) {
 		var $puller = $('.puller');
 		var $messages = $puller.prevAll('#messages-inner');
 		$messages.data('resize', false);
 	});
 
-	$(window).off('mousemove').on('mousemove', function(e) {
-		var $puller = $('.puller');
-		var $messages = $puller.prevAll('#messages-inner');
+	$(window).on('mousemove', function(e) {
+		var $messages = $('#messages-inner');
 		if ($messages.data('resize')) {
 			var height = e.pageY - $messages.offset().top;
 			$messages.height(height);

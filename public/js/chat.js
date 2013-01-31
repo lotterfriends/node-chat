@@ -6,10 +6,11 @@ socket.on('connect', function(){
 
 var fehler_id = 0;
 socket.on('error', function(message){
-	var $fehlerContainer = $('#login:visible .modal-body');
+	var $fehlerContainer = $('#login .modal-body:visible');
 	if (!$fehlerContainer.length) {
 		$fehlerContainer = $('.content.chat');
 	}
+	console.log($fehlerContainer);
 	var $fehler = $('.alert', $fehlerContainer);
 	if ($fehler.length) {
 		window.clearTimeout(fehler_id);

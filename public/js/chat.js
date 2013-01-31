@@ -90,10 +90,10 @@ $(function(){
 		$('.count').html(300 - akt_count);
 	});
 
-	$('.clear').click(function() {
-		$('#messages-inner *').remove();
+	$('#messages-inner').dblclick(function() {
+		$('#messages-inner .entry').remove();
 	});
-
+	
 	$('#users #user-list').on('click', 'a', function(e) {
 		$('#data').val('@' + $(this).text() + ' ' + $('#data').val()).focus();
 		e.stopPropagation();
@@ -160,9 +160,5 @@ $(function(){
 			document.title = "Chat";
 		}
 	});
-
-
+	
 });
-
-
-

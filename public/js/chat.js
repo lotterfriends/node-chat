@@ -1,18 +1,37 @@
 var socket = io.connect('http://localhost');
 
 socket.on('connect', function(){
-	socket.emit('adduser', prompt("Wie ist dein Nickname?"));
+	$('#login').modal('show');
 });
 
+var fehler_id = 0;
 socket.on('error', function(message){
-	alert(message);
-	if(!$(window).data('user')) {
-		socket.emit('adduser', prompt("Wie ist dein Nickname?"));
+	var $fehlerContainer = $('#login:visible .modal-body');
+	if (!$fehlerContainer.length) {
+		$fehlerContainer = $('.content.chat');
 	}
-	$('#data').focus();
+	var $fehler = $('.alert', $fehlerContainer);
+	if ($fehler.length) {
+		window.clearTimeout(fehler_id);
+		$fehler.html(message).show();
+	} else {
+		var $message = $('<div class="alert alert-error">' + message + '</div>');
+		$fehlerContainer.prepend($message);
+	}
+	$fehlerContainer.ready(function() {
+		fehler_id = window.setTimeout(function() {
+			$('.alert', $fehlerContainer).hide('slow');
+		},6000);
+	});
+	if(!$(window).data('user')) {
+		$('#login').modal('show');
+	}  else {
+		$('#data').focus();
+	}
 });
 
 socket.on('login', function(username) {
+	$('#login').modal('hide');
 	$(window).data('user', username);
 });
 
@@ -38,7 +57,7 @@ socket.on('updateusers', function(data) {
 		if ($(window).data('user') == key){
 			activeCSSClass = ' class="active" ';
 			user = key;
-		} 
+		}
 		$('#users ul').append('<li' + activeCSSClass +'>'+ user +'</li>');
 	});
 });
@@ -62,13 +81,29 @@ $(function(){
 	$('.clear').click(function() {
 		$('#messages-inner *').remove();
 	});
-	
+
 	$('#users #user-list').on('click', 'a', function(e) {
 		$('#data').val('@' + $(this).text() + ' ' + $('#data').val()).focus();
 		e.stopPropagation();
 		return false;
 	});
-	
-	
 
+	$('#login .btn.btn-primary').click(function() {
+		var username = $.trim($('#login input[name=nickname]').val());
+		socket.emit('adduser', username);
+	});
+
+    $('#login').on('shown', function () {
+		$('#login input[name=nickname]:first').focus().select();
+		$('.modal-backdrop.fade.in').unbind('click')
+    });
+
+	$('#login input[name=nickname]:first').on('keypress', function(e) {
+		if(e.which == 13) {
+			$(this).blur();
+			$('#login .btn.btn-primary').click();
+			e.stopPropagation();
+			return false;
+		}
+	});
 });

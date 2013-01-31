@@ -1,4 +1,6 @@
 var socket = io.connect('http://localhost');
+var state, visibilityChange; 
+
 
 socket.on('connect', function(){
 	$('#login').modal('show');
@@ -45,8 +47,12 @@ socket.on('updatechat', function (username, data, time) {
 	var $message = '<span class="message">' + data +'</span>';
 	var $entry = '<p class="entry">' + $time + $user + $message + '</p>';
 	$('#messages-inner').append($entry);
-	$('#messages-inner').scrollTo($('#messages-inner .entry:last'))
+	$('#messages-inner').scrollTo($('#messages-inner .entry:last'));
 	$('#data').focus();
+	if (document[state] == "hidden") {
+		$.titleAlert("Neue Nachricht!");
+	}
+	
 });
 
 socket.on('updateusers', function(data) {
@@ -128,5 +134,29 @@ $(function(){
 			$messages.height(height);
 		}
 	});
+	
+	if (typeof document.hidden !== "undefined") {
+  		visibilityChange = "visibilitychange";
+  		state = "visibilityState";
+	} else if (typeof document.mozHidden !== "undefined") {
+  		visibilityChange = "mozvisibilitychange";
+  		state = "mozVisibilityState";
+	} else if (typeof document.msHidden !== "undefined") {
+  		visibilityChange = "msvisibilitychange";
+  		state = "msVisibilityState";
+	} else if (typeof document.webkitHidden !== "undefined") {
+  		visibilityChange = "webkitvisibilitychange";
+		 state = "webkitVisibilityState";
+	}
+
+	$(document).on(visibilityChange, function() {
+		if (document[state] == 'visible') {
+			document.title = "Chat";
+		}
+	});
+
 
 });
+
+
+

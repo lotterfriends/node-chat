@@ -7,5 +7,6 @@
 	"xLogout" : "wurde ausgeloggt",
 	"error.notLoggedIn" : "Nicht eingeloggt!",
 	"error.noMessage" : "Keine Nachricht eingegeben",
-	"error.longMessage" : "Die eingebene Nachricht ist zu lang"
+	"error.longMessage" : "Die eingebene Nachricht ist zu lang",
+	"error.ShortUsername" : "Der Benutzername ist zu kurz (Min. 4 Zeichen)"
 }

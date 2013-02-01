@@ -3,12 +3,12 @@ body {
 }
 
 .content {
-   border: 1px solid rgba(0, 0, 0, 0.05);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
-    background-color: #999; /* F5F5F5*/
-    border-radius: 6px 6px 6px 6px;
-    margin-bottom: 30px;
-    padding: 60px;
+	border: 1px solid rgba(0, 0, 0, 0.05);
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+	background-color: #999; /* F5F5F5*/
+	border-radius: 6px 6px 6px 6px;
+	margin-bottom: 30px;
+	padding: 60px;
 }
 
 .content.chat {
@@ -25,10 +25,9 @@ body {
 
 #messages-inner {
 	padding: 0;
-	min-height: 500px !important;
 	height: 500px;
-    overflow-x: hidden;
-    overflow-y: auto;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
 #messages-inner .entry {
@@ -71,23 +70,23 @@ body {
 }
 
 #data {
-    width: 669px;
-    padding-right: 40px;
-    border-color: #999999;
+	width: 669px;
+	padding-right: 40px;
+	border-color: #999999;
 }
 
 #data:focus {
-   border-color: rgba(82, 168, 236, 0.8);
+	border-color: rgba(82, 168, 236, 0.8);
 }
 
 .count {
-    color: #999999;
-    float: right;
-    margin-left: 684px;
-    margin-top: 16px;
-    padding: 0 10px;
-    position: absolute;
-    z-index: 99;
+	color: #999999;
+	float: right;
+	margin-left: 684px;
+	margin-top: 16px;
+	padding: 0 10px;
+	position: absolute;
+	z-index: 99;
 }
 
 .content.chat .alert {

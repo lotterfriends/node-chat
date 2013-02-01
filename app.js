@@ -57,6 +57,9 @@ io.sockets.on('connection', function (socket) {
 		if (username.length > 20) {
 			return socket.emit('error', intNat.T("error.LongUsername"));
 		}
+		if (username.length < 4) {
+			return socket.emit('error', intNat.T("error.ShortUsername"));
+		}
 		username = stringUtil.escapeHTML(username).trim();
 		socket.username = username;
 		usernames[username] = username;
@@ -92,7 +95,7 @@ io.sockets.on('connection', function (socket) {
 
 	socket.on('disconnect', function(){
 		delete usernames[socket.username];
-		if (!socket.username) {
+		if (socket.username) {
 			io.sockets.emit('updateusers', usernames);
 		}
 		socket.broadcast.emit('updatechat', app.get('server_username'), socket.username + ' ' + intNat.T("xLogout"));

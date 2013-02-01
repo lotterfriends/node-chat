@@ -57,18 +57,16 @@ function login(username) {
 }
 
 function updateChat(username, message, time) {
-	if (!time)
-		time = new Date();
+	if (!time) time = new Date();
 	var zeit = Date.create(time).format('{HH}:{mm}:{ss}');
 	var $time = '<span class="time">(' + zeit + ') </span>';
 	var $user = '<span class="username">' + username + ': </span>';
 	var $message = '<span class="message">' + message + '</span>';
-	var $entry = '<p class="entry">' + $time + $user + $message + '</p>';
+	var $entry = '<div class="entry">' + $time + $user + $message + '</div>';
 	$('#messages-inner').append($entry);
 	$('#messages-inner').scrollTo($('#messages-inner .entry:last'));
 	focusSendField();
-	if (document[state] == "hidden") {
-		$(document).data('title', document.title);
+	if (document[state] == "hidden") {		
 		$.titleAlert("Neue Nachricht!");
 	}
 }
@@ -152,9 +150,15 @@ $(function() {
 		pageReadyFunctions[i]();
 	}
 
+	$(document).data('title', document.title);
+
 	$('#datasend').click(function() {
 		var message = $('#data').val();
+		if ($('#messages .input-append textarea:visible').length) {
+			message = $('#messages .input-append textarea').val();
+		}
 		$('#data').val('');
+		$('#messages .input-append textarea').val('');
 		socket.emit('sendchat', message);
 	});
 
@@ -189,5 +193,48 @@ $(function() {
 			return false;
 		}
 	});
+	
+	$('.expand').tooltip();
+	
+	$(window).on('click','.expand:not(.expanded)', function() {
+		var $holder = $('#messages .input-append');
+		$('input', $holder).hide('slow');
+		if ($('textarea', $holder).length) {
+			$('textarea', $holder).show();
+		} else {
+			$holder.prepend('<textarea class="span7" id="message_area">');
+			$('textarea', $holder).on('keyup', function() {
+				var akt_count = $(this).val().length;
+				$('.count').html(300 - akt_count);
+			});
+			$('textarea', $holder).on('keydown', function(e) {
+				if (e.which == KEYCODE_ENTER && e.ctrlKey) {
+					$(this).blur();
+					$('#datasend').click();
+				}
+			});
+		}
+		$('.icon-arrow-down', $holder).removeClass('icon-arrow-down').addClass('icon-arrow-up');
+		$('.count').data('old-margin-top', $('.count').css('margin-top')).css('margin-top', '46px');
+		$('.count').data('old-margin-left', $('.count').css('margin-left')).css('margin-left', '687px');
+		
+		$(this).attr('data-original-title', 'Normale Eingabe');
+		$(this).addClass('expanded');
+		$(this).val('');
+		$('.count').html(300);
+	});
+	
+	$(window).on('click','.expand.expanded', function() {
+		var $holder = $('#messages .input-append');
+		$('textarea', $holder).hide();
+		$('#data', $holder).val('').show();
+		$('.count').html(300);
+		$('.icon-arrow-up', $holder).removeClass('icon-arrow-up').addClass('icon-arrow-down');
+		$('.count').css('margin-top', $('.count').data('old-margin-top'));
+		$('.count').css('margin-left', $('.count').data('old-margin-left'));
+		$(this).attr('data-original-title', 'Erweiterte Eingabe');
+		$(this).removeClass('expanded');
+	});
+	
 
 });

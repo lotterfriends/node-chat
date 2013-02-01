@@ -70,19 +70,24 @@ body {
 }
 
 #data {
-	width: 669px;
+	width: 634px;
 	padding-right: 40px;
 	border-color: #999999;
 }
 
-#data:focus {
+textarea#message_area {
+	width: 670px; /* 635 bei einem weiterem Button*/
+	border-color: #999999;
+}
+
+#data:focus, textarea#message_area:focus {
 	border-color: rgba(82, 168, 236, 0.8);
 }
 
 .count {
 	color: #999999;
 	float: right;
-	margin-left: 684px;
+	margin-left: 652px;
 	margin-top: 16px;
 	padding: 0 10px;
 	position: absolute;

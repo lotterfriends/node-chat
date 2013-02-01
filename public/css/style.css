@@ -76,6 +76,10 @@ body {
     border-color: #999999;
 }
 
+#data:focus {
+   border-color: rgba(82, 168, 236, 0.8);
+}
+
 .count {
     color: #999999;
     float: right;

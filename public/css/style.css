@@ -73,6 +73,7 @@ body {
 #data {
     width: 669px;
     padding-right: 40px;
+    border-color: #999999;
 }
 
 .count {

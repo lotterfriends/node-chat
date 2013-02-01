@@ -67,7 +67,7 @@ function login(username) {
 		socket.username = username;
 		usernames[username] = username;
 		socket.emit('login', username);
-		loadMessages();
+		loadMessages(socket);
 		socket.emit('updatechat', app.get('server_username'), intNat.T("user.youConnected"));
 		socket.broadcast.emit('updatechat', app.get('server_username'), intNat.T("user.hasConnected", username));
 		io.sockets.emit('updateusers', usernames);
@@ -99,7 +99,7 @@ function disconnect() {
 	}
 }
 
-function loadMessages() {
+function loadMessages(socket) {
 	for (var i in messages) {
 		socket.emit('updatechat', messages[i].username, messages[i].message, messages[i].time);
 	}

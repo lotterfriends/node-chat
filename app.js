@@ -51,6 +51,7 @@ io.sockets.on('connection', function (socket) {
 	socket.on('login', login);
 	socket.on('sendchat', sendchat);
 	socket.on('disconnect', disconnect);
+	socket.on('loadSmileys', loadSmileys);
 });
 
 // Start Server
@@ -103,6 +104,10 @@ function loadMessages(socket) {
 	for (var i in messages) {
 		socket.emit('updatechat', messages[i].username, messages[i].message, messages[i].time);
 	}
+}
+
+function loadSmileys() {
+	this.emit('loadSmileys', smileyParser.smileyDir, smileyParser.smileys)
 }
 
 function validateUsername(username, callback) {

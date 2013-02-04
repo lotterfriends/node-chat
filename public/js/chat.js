@@ -4,7 +4,8 @@ var socket = io.connect('http://localhost')
 	, visibilityChange
 	, fehler_id = 0
 	, pageReadyFunctions = []
-	, KEYCODE_ENTER = 13;
+	, KEYCODE_ENTER = 13
+	, message_max_chars = parseInt($('.count').text());
 
 // Client Events
 socket.on('connect', showDialog);
@@ -12,6 +13,7 @@ socket.on('error', handleError);
 socket.on('login', login);
 socket.on('updatechat', updateChat);
 socket.on('updateusers', updateUser);
+socket.on('loadSmileys', loadSmileys);
 
 function handleError(message) {
 	var DISPLAY_TIME = 6000;
@@ -41,6 +43,7 @@ function handleError(message) {
 
 function showDialog() {
 	$('#login').modal('show');
+	socket.emit("loadSmileys");
 }
 
 function hideDialog() {
@@ -83,6 +86,33 @@ function updateUser(users) {
 		}
 		$('#users ul').append('<li' + activeCSSClass + '>' + user + '</li>');
 	});
+}
+
+function loadSmileys(smileyDir,smileys) {
+	var j = 0, buffer = "";
+	buffer = "<table cellpadding='2'>";
+	for (var i in smileys) {
+		var code = (smileys[i].code+'').replace(/([\\"'])/g, "\\$1").replace(/\0/g, "\\0");
+		if (j == 0) buffer += "<tr>";
+		buffer += '<td><a href="javascript:insert(\''+code+'\')">';
+		buffer += '<img src="' + smileyDir + smileys[i].url + '" alt="' + code + '" />';
+		buffer += "</a></td>";
+		if (j == 5) {
+			j = 0;
+			buffer += "</tr>";
+		} else {
+			j++;
+		}
+	}
+	if (j < 5) buffer += "</tr>";
+	buffer += "</table>";
+	$('.smileyHider').append(buffer);
+}
+ 
+function insert(code) {
+	$('#data').val($('#data').val() + " " + code + " ");
+	$('.smiley-holder').popover('hide');
+	focusSendField();
 }
 
 function initPuller() {
@@ -138,7 +168,7 @@ pageReadyFunctions.push(initVisibilityStateListener);
 function initCountChars() {
 	$('#data').on('keyup', function() {
 		var akt_count = $(this).val().length;
-		$('.count').html(300 - akt_count);
+		$('.count').html(message_max_chars - akt_count);
 	});
 }
 
@@ -194,47 +224,11 @@ $(function() {
 		}
 	});
 	
-	$('.expand').tooltip();
 	
-	$(window).on('click','.expand:not(.expanded)', function() {
-		var $holder = $('#messages .input-append');
-		$('input', $holder).hide('slow');
-		if ($('textarea', $holder).length) {
-			$('textarea', $holder).show();
-		} else {
-			$holder.prepend('<textarea class="span7" id="message_area">');
-			$('textarea', $holder).on('keyup', function() {
-				var akt_count = $(this).val().length;
-				$('.count').html(300 - akt_count);
-			});
-			$('textarea', $holder).on('keydown', function(e) {
-				if (e.which == KEYCODE_ENTER && e.ctrlKey) {
-					$(this).blur();
-					$('#datasend').click();
-				}
-			});
+	$('.smiley-holder').popover({
+		content : function() {
+			return $('.smileyHider').html();
 		}
-		$('.icon-arrow-down', $holder).removeClass('icon-arrow-down').addClass('icon-arrow-up');
-		$('.count').data('old-margin-top', $('.count').css('margin-top')).css('margin-top', '46px');
-		$('.count').data('old-margin-left', $('.count').css('margin-left')).css('margin-left', '687px');
-		
-		$(this).attr('data-original-title', 'Normale Eingabe');
-		$(this).addClass('expanded');
-		$(this).val('');
-		$('.count').html(300);
 	});
-	
-	$(window).on('click','.expand.expanded', function() {
-		var $holder = $('#messages .input-append');
-		$('textarea', $holder).hide();
-		$('#data', $holder).val('').show();
-		$('.count').html(300);
-		$('.icon-arrow-up', $holder).removeClass('icon-arrow-up').addClass('icon-arrow-down');
-		$('.count').css('margin-top', $('.count').data('old-margin-top'));
-		$('.count').css('margin-left', $('.count').data('old-margin-left'));
-		$(this).attr('data-original-title', 'Erweiterte Eingabe');
-		$(this).removeClass('expanded');
-	});
-	
 
 });

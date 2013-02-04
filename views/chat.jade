@@ -18,16 +18,16 @@ html
 					#messages.span8
 						#messages-inner.well
 						.puller ::::
+						
 						span.count 300
 						.input-append.well.well-large
-							input.span7#data(type='text')
-							button.expand.btn.btn-primary(title='Erweiterte Eingabe', rel='tooltip', data-placement='bottom')
-								i.icon-arrow-down
+							input.span7#data(type='text')							
+							button.btn.btn-primary.smiley-holder(data-trigger="click", data-placement="top", data-html="true", data-title="Smileys")
+								i.icon-heart
 							button#datasend.btn.btn-success senden
 					#users.sidebar-nav.span3.well
 						ul#user-list.nav.nav-list
 					.clearfix
-					
 					
 		#login.modal.hide.fade(data-keyboard='false')
 			.modal-header Login
@@ -39,6 +39,7 @@ html
 							input(name='nickname', type='text', placeholder='Nickname')
 			.modal-footer
 				.btn.btn-primary Login
+		.smileyHider
 
 	script(src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js")
 	script(src="/libs/bootstrap/js/bootstrap.min.js")

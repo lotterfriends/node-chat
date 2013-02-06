@@ -1,5 +1,6 @@
 // Global Vars
-var socket = io.connect('http://localhost')
+
+var socket = io.connect('http:' + window.location.hostname)
 	, state
 	, visibilityChange
 	, fehler_id = 0
@@ -106,7 +107,9 @@ function loadSmileys(smileyDir,smileys) {
 	}
 	if (j < 5) buffer += "</tr>";
 	buffer += "</table>";
-	$('.smileyHider').append(buffer);
+	if (!$('.smileyHider table').length) {
+		$('.smileyHider').append(buffer);	
+	}
 }
  
 function insert(code) {

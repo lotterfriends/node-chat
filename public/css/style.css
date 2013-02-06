@@ -112,3 +112,8 @@ textarea#message_area {
 .smileyHider {
 	display: none;
 }
+
+.smiley-holder + .popover h3.popover-title {
+	display:none; 
+}
+ 
